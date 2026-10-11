@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 
 import { knjigaApi } from "../services/api";
-import {  useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function Proizvodi() {
   const [knjige, setKnjige] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const otvoriRecenzije = (knjigaId) => {
     localStorage.setItem("selectedKnjigaId", knjigaId);
@@ -26,52 +26,51 @@ function Proizvodi() {
   };
 
   const dodajUKorpu = (knjiga) => {
-    
     if (knjiga.stanje !== undefined && knjiga.stanje <= 0) {
-    alert("Knjiga trenutno nije na stanju!");
-    return;
-  }
+      alert("Knjiga trenutno nije na stanju!");
+      return;
+    }
 
-  const unos = prompt("Unesite količinu:", "1");
+    const unos = prompt("Unesite količinu:", "1");
 
-  if (unos === null) {
-    return;
-  }
+    if (unos === null) {
+      return;
+    }
 
-  const kolicina = parseInt(unos, 10);
+    const kolicina = parseInt(unos, 10);
 
-  if (isNaN(kolicina) || kolicina <= 0) {
-    alert("Unesite validnu količinu!");
-    return;
-  }
+    if (isNaN(kolicina) || kolicina <= 0) {
+      alert("Morate uneti validnu količinu!");
+      return;
+    }
 
-  const korpa = JSON.parse(localStorage.getItem("korpa") || "[]");
-  const knjigaId = knjiga.knjigaID || knjiga.id;
+    const korpa = JSON.parse(localStorage.getItem("korpa") || "[]");
+    const knjigaId = knjiga.knjigaID || knjiga.id;
 
-  const postojeci = korpa.find((item) => item.proizvodId === knjigaId);
+    const postojeci = korpa.find((item) => item.proizvodId === knjigaId);
 
-  if (postojeci) {
-    postojeci.kolicina += kolicina;
-  } else {
-    korpa.push({
-      proizvodId: knjigaId,
-      naziv: knjiga.naziv,
-      autor: knjiga.autor ,
-      opis: knjiga.opis,
-      cena: knjiga.cena,
-      kolicina: kolicina,
-    });
-  }
+    if (postojeci) {
+      postojeci.kolicina += kolicina;
+    } else {
+      korpa.push({
+        proizvodId: knjigaId,
+        naziv: knjiga.naziv,
+        autor: knjiga.autor,
+        opis: knjiga.opis,
+        cena: knjiga.cena,
+        kolicina: kolicina,
+      });
+    }
 
-  localStorage.setItem("korpa", JSON.stringify(korpa));
-  alert("Knjiga je dodata u korpu!");
+    localStorage.setItem("korpa", JSON.stringify(korpa));
+    alert("Knjiga je dodata u korpu!");
   };
 
   const filtriraneKnjige = knjige.filter(
     (k) =>
       (k.naziv || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
       (k.autor || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (k.opis || "").toLowerCase().includes(searchTerm.toLowerCase())
+      (k.opis || "").toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -79,7 +78,6 @@ function Proizvodi() {
       <div style={styles.headerContainer}>
         <div>
           <h2 style={styles.header}>Katalog knjiga</h2>
-         
         </div>
         <input
           type="text"
@@ -92,8 +90,8 @@ function Proizvodi() {
 
       <div style={styles.grid}>
         {filtriraneKnjige.map((knjiga, idx) => {
-          const knjigaId = knjiga.knjigaID ;
-          const rasprodato =  knjiga.stanje <= 0;
+          const knjigaId = knjiga.knjigaID;
+          const rasprodato = knjiga.stanje <= 0;
 
           return (
             <div key={knjigaId} style={styles.card}>
@@ -111,9 +109,7 @@ function Proizvodi() {
 
               <div style={styles.cardContent}>
                 <h3 style={styles.title}>{knjiga.naziv}</h3>
-                <p style={styles.author}>
-                   {knjiga.autor || "Nepoznati autor"}
-                </p>
+                <p style={styles.author}>{knjiga.autor || "Nepoznati autor"}</p>
                 <p style={styles.desc}>
                   {knjiga.opis || "Nema opisa za ovu knjigu."}
                 </p>
@@ -121,7 +117,7 @@ function Proizvodi() {
                 <div style={styles.footerRow}>
                   <div style={styles.priceRow}>
                     <span style={styles.price}>
-                      {knjiga.cena} { "RSD"}
+                      {knjiga.cena} {"RSD"}
                     </span>
                   </div>
 
@@ -136,18 +132,11 @@ function Proizvodi() {
                     {rasprodato ? "Nema na stanju" : "Dodaj u korpu"}
                   </button>
                   <button
-      onClick={() => otvoriRecenzije(knjigaId)}
-      style={{ ...styles.btn, backgroundColor: "#21262d" }}
-    >
-      Vidi Recenzije
-    </button>
-                    
-                  
-
-
-
-
-
+                    onClick={() => otvoriRecenzije(knjigaId)}
+                    style={{ ...styles.btn, backgroundColor: "#21262d" }}
+                  >
+                    Vidi Recenzije
+                  </button>
                 </div>
               </div>
             </div>
@@ -197,7 +186,7 @@ const styles = {
     backgroundColor: "#161b22",
     color: "#ffffff",
     border: "1px solid #30363d",
-    
+
     width: "100%",
     maxWidth: "180px",
     outline: "none",
